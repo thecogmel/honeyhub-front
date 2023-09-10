@@ -1,0 +1,73 @@
+import React, { useCallback } from 'react';
+
+import { Button, List, ListItem } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { useAuth } from '@contexts/Auth';
+
+import RoutesPath from '@router/routes';
+
+import img1 from '../../../../assets/images/logos/HoneyHub.svg';
+import { SidebarItems } from './MenuItens';
+import { ImageLogo } from './styles';
+
+const Sidebar: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { logout } = useAuth();
+
+  const checkRoute = useCallback(
+    (route: string) => {
+      return location.pathname.split('/')[1] === route.split('/')[1];
+    },
+    [location.pathname]
+  );
+
+  return (
+    <List
+      sx={{
+        width: '100%',
+        maxWidth: 265,
+        boxShadow: '#717a831c 0px 7px 30px 0px',
+      }}
+      component="nav"
+    >
+      <ListItem
+        sx={{
+          display: 'flex',
+          marginY: '24px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+        }}
+      >
+        <ImageLogo
+          onClick={() => navigate(RoutesPath.private.home)}
+          src={img1}
+        />
+      </ListItem>
+
+      {SidebarItems.map(({ icon: Icon, name, route }) => (
+        <ListItem key={name}>
+          <Button
+            variant={checkRoute(route) ? 'contained' : 'text'}
+            fullWidth
+            size="large"
+            sx={{ height: '47px', fontSize: '18px', marginX: '8px' }}
+            startIcon={<Icon />}
+            onClick={() => {
+              if (route !== RoutesPath.private.logout) {
+                return navigate(route);
+              }
+              return logout();
+            }}
+          >
+            {name}
+          </Button>
+        </ListItem>
+      ))}
+    </List>
+  );
+};
+
+export default Sidebar;

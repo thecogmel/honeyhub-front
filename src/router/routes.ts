@@ -7,6 +7,7 @@ const RoutesPath = {
   },
   private: {
     home: '/dashboard',
+    honeycomb: '/colmeia',
     logout: '/logout',
   },
 };

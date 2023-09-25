@@ -1,3 +1,4 @@
+import { GiHoneycomb } from 'react-icons/gi';
 import { MdLineAxis, MdLogout } from 'react-icons/md';
 
 import RoutesPath from '@router/routes';
@@ -9,6 +10,11 @@ export const SidebarItems: Array<SideBarItem> = [
     name: 'Dashboard',
     icon: MdLineAxis,
     route: RoutesPath.private.home,
+  },
+  {
+    name: 'Colmeias',
+    icon: GiHoneycomb,
+    route: RoutesPath.private.honeycomb,
   },
   {
     name: 'Sair',

@@ -9,16 +9,16 @@ export const SidebarItems: Array<SideBarItem> = [
   {
     name: 'Dashboard',
     icon: MdLineAxis,
-    route: RoutesPath.private.home,
+    route: RoutesPath.private.home.path,
   },
   {
     name: 'Colmeias',
     icon: GiHoneycomb,
-    route: RoutesPath.private.honeycomb,
+    route: RoutesPath.private.hive.path,
   },
   {
     name: 'Sair',
     icon: MdLogout,
-    route: RoutesPath.private.logout,
+    route: RoutesPath.private.logout.path,
   },
 ];

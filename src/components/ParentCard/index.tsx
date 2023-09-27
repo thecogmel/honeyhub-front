@@ -10,7 +10,11 @@ type Props = {
 
 const ParentCard: React.FC<Props> = ({ title, children, footer }) => {
   return (
-    <Card sx={{ padding: 0, border: 'none' }} elevation={0} variant={undefined}>
+    <Card
+      sx={{ padding: 0, border: 'none', margin: 0 }}
+      elevation={0}
+      variant={undefined}
+    >
       <CardHeader title={title} />
       <Divider />
 
@@ -18,7 +22,9 @@ const ParentCard: React.FC<Props> = ({ title, children, footer }) => {
       {footer ? (
         <>
           <Divider />
-          <Box p={3}>{footer}</Box>
+          <Box display={'flex'} justifyContent={'flex-end'} p={3}>
+            {footer}
+          </Box>
         </>
       ) : (
         ''

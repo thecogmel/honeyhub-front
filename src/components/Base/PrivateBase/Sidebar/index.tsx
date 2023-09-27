@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
         }}
       >
         <ImageLogo
-          onClick={() => navigate(RoutesPath.private.home)}
+          onClick={() => navigate(RoutesPath.private.home.path)}
           src={img1}
         />
       </ListItem>
@@ -56,7 +56,7 @@ const Sidebar: React.FC = () => {
             sx={{ height: '47px', fontSize: '18px', marginX: '8px' }}
             startIcon={<Icon />}
             onClick={() => {
-              if (route !== RoutesPath.private.logout) {
+              if (route !== RoutesPath.private.logout.path) {
                 return navigate(route);
               }
               return logout();

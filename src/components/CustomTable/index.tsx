@@ -1,26 +1,26 @@
 import React from 'react';
 
 import {
+  Card,
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TableCell,
   Typography,
-  TableBody,
-  Stack,
-  Avatar,
-  Box,
-  AvatarGroup,
-  Chip,
-  Table,
-  Card,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+import RoutesPath from '@router/routes';
 
 import { TableType, basicsTableData } from './tableData';
 
 const basics: TableType[] = basicsTableData;
 
 const CustomTable: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <Card
       sx={{
@@ -39,41 +39,32 @@ const CustomTable: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="h6">Users</Typography>
+                <Typography variant="h6">ID</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h6">Project Name</Typography>
+                <Typography variant="h6">Nome</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h6">Team</Typography>
+                <Typography variant="h6">Email responsável</Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="h6">Status</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Budget</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {basics.map((basic) => (
-              <TableRow key={basic.id} hover sx={{ cursor: 'pointer' }}>
+              <TableRow
+                key={basic.id}
+                hover
+                sx={{
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  cursor: 'pointer',
+                }}
+                onClick={() => navigate(RoutesPath.private.detailHive.path)}
+              >
                 <TableCell>
-                  <Stack direction="row" spacing={2}>
-                    <Avatar
-                      src={basic.imgsrc}
-                      alt={basic.imgsrc}
-                      sx={{ width: 40, height: 40 }}
-                    />
-                    <Box>
-                      <Typography variant="h6" fontWeight="600">
-                        {basic.name}
-                      </Typography>
-                      <Typography color="textSecondary" variant="subtitle2">
-                        {basic.post}
-                      </Typography>
-                    </Box>
-                  </Stack>
+                  <Typography variant="h6">{basic.budget}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography
@@ -85,25 +76,11 @@ const CustomTable: React.FC = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Stack direction="row">
-                    <AvatarGroup max={4}>
-                      {basic.teams?.map((team) => (
-                        <Avatar
-                          key={team.id}
-                          sx={{
-                            bgcolor: team.color,
-                            width: 35,
-                            height: 35,
-                          }}
-                        >
-                          {team.text}
-                        </Avatar>
-                      ))}
-                    </AvatarGroup>
-                  </Stack>
+                  <Typography color="textSecondary" variant="h6">
+                    {basic.budget}
+                  </Typography>
                 </TableCell>
                 <TableCell>
-                  {/* <Chip chipcolor={basic.status == 'Active' ? 'success' : basic.status == 'Pending' ? 'warning' : basic.status == 'Completed' ? 'primary' : basic.status == 'Cancel' ? 'error' : 'secondary'} */}
                   <Chip
                     sx={{
                       bgcolor:
@@ -131,9 +108,6 @@ const CustomTable: React.FC = () => {
                     size="small"
                     label={basic.status}
                   />
-                </TableCell>
-                <TableCell>
-                  <Typography variant="h6">${basic.budget}k</Typography>
                 </TableCell>
               </TableRow>
             ))}

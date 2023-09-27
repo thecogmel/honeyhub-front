@@ -4,20 +4,24 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import PrivateBase from '@components/Base/PrivateBase';
 
-import Home from '@pages/Dashboard';
-import Honeycomb from '@pages/Honeycomb';
-
 import RoutesPath from '../routes';
+import pages from './pages';
 
 const PublicRoutes: React.FC = () => {
   return (
     <PrivateBase>
       <Routes>
-        <Route path={RoutesPath.private.home} element={<Home />} />
-        <Route path={RoutesPath.private.honeycomb} element={<Honeycomb />} />
+        {pages.map((page) => (
+          <Route
+            key={page.route.path}
+            path={page.route.path}
+            element={<page.component />}
+          />
+        ))}
+
         <Route
           path="*"
-          element={<Navigate to={RoutesPath.private.home} replace />}
+          element={<Navigate to={RoutesPath.private.home.path} replace />}
         />
       </Routes>
     </PrivateBase>

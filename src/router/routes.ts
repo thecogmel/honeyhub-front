@@ -6,9 +6,15 @@ const RoutesPath = {
     confirmEmail: '/confirmar-email/',
   },
   private: {
-    home: '/dashboard',
-    honeycomb: '/colmeia',
-    logout: '/logout',
+    home: {
+      path: '/dashboard',
+    },
+    hive: { path: '/colmeia' },
+    detailHive: { path: '/colmeia/:hiveId/' },
+    createHive: { path: '/colmeia/criar/' },
+    editHive: { path: '/colmeia/editar/:hiveId/' },
+    profile: { path: '/perfil' },
+    logout: { path: '/logout' },
   },
 };
 

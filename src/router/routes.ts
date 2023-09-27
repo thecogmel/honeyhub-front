@@ -13,6 +13,7 @@ const RoutesPath = {
     detailHive: { path: '/colmeia/:hiveId/' },
     createHive: { path: '/colmeia/criar/' },
     editHive: { path: '/colmeia/editar/:hiveId/' },
+    profile: { path: '/perfil' },
     logout: { path: '/logout' },
   },
 };

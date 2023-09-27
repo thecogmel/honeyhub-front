@@ -2,6 +2,7 @@ import Dashboard from '@pages/Dashboard';
 import CreateHive from '@pages/Hives/CreateHive';
 import DetailHive from '@pages/Hives/DetailHive';
 import Hive from '@pages/Hives/ListHives';
+import Profile from '@pages/Profile';
 import RoutesPath from '@router/routes';
 
 interface privatePagesProps {
@@ -23,6 +24,10 @@ const privatePages: Array<privatePagesProps> = [
   {
     route: RoutesPath.private.detailHive,
     component: DetailHive,
+  },
+  {
+    route: RoutesPath.private.profile,
+    component: Profile,
   },
   { route: RoutesPath.private.createHive, component: CreateHive },
 ];

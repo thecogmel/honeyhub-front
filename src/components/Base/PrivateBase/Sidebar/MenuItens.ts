@@ -1,5 +1,6 @@
 import { GiHoneycomb } from 'react-icons/gi';
 import { MdLineAxis, MdLogout } from 'react-icons/md';
+import { PiUserCircleLight } from 'react-icons/pi';
 
 import RoutesPath from '@router/routes';
 
@@ -15,6 +16,11 @@ export const SidebarItems: Array<SideBarItem> = [
     name: 'Colmeias',
     icon: GiHoneycomb,
     route: RoutesPath.private.hive.path,
+  },
+  {
+    name: 'Perfil',
+    icon: PiUserCircleLight,
+    route: RoutesPath.private.profile.path,
   },
   {
     name: 'Sair',

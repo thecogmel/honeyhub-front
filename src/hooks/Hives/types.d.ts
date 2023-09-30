@@ -3,6 +3,7 @@ interface Hive {
   name: string;
   description: string;
   status: string;
+  responsible?: UserInfo;
   createdAt: string;
   updatedAt: string;
 }

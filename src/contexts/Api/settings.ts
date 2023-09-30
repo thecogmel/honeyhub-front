@@ -14,4 +14,13 @@ export const endpoints = {
     changePassword: '/auth/update-password/',
     confirmEmail: '/auth/confirm-email/',
   },
+  private: {
+    hives: {
+      list: '/hives/',
+      detail: '/hives/:id/',
+      create: '/hives/',
+      update: '/hives/:id/',
+      delete: '/hives/:id/',
+    },
+  },
 };

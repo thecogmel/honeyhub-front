@@ -9,9 +9,14 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { enqueueSnackbar } from 'notistack';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
+import { useHives } from '@hooks';
 
 import Breadcrumb from '@components/Breadcrumb';
+import ChipStatusHive from '@components/ChipStatusHive';
 import DeleteButton from '@components/DeleteButton';
 import ParentCard from '@components/ParentCard';
 
@@ -21,17 +26,49 @@ import routes from './routes';
 
 const DetailHive: React.FC = () => {
   const navigate = useNavigate();
-  const loading = false;
+  const { hiveId } = useParams<{ hiveId: string }>();
+  const location = useLocation();
+  const { getHive, deleteHive } = useHives();
+  const queryClient = useQueryClient();
+
+  const fetchHive = useQuery(['hive', hiveId!], () => getHive(hiveId!), {
+    initialData: location.state as Hive,
+    enabled: !location.state,
+  });
+
+  const deleteHiveRequest = useMutation(() => deleteHive(hiveId!), {
+    onSuccess: () => {
+      enqueueSnackbar('Colméia deletada com sucesso', {
+        variant: 'success',
+      });
+      queryClient.invalidateQueries(['hives']);
+      navigate(RoutesPath.private.hive.path);
+    },
+    onError: () => {
+      enqueueSnackbar('Erro ao deletar colméia', {
+        variant: 'error',
+      });
+    },
+  });
+
   return (
     <>
       <Grid container justifyContent={'space-between'} my={5}>
         <Grid item xs={6}>
-          <Breadcrumb title="Colmeias" items={routes} />
+          <Breadcrumb
+            title="Colmeias"
+            subtitle="Aqui você encontra o detalhamento da colméia selecionada"
+            items={routes}
+          />
         </Grid>
         <Grid item>
           <Button
             size="large"
-            onClick={() => navigate(RoutesPath.private.editHive.path)}
+            onClick={() =>
+              navigate(
+                RoutesPath.private.editHive.path.replace(':hiveId', hiveId!)
+              )
+            }
             variant="outlined"
           >
             Editar colméia
@@ -39,7 +76,7 @@ const DetailHive: React.FC = () => {
           <DeleteButton
             modalTitle={'Confirmação de exclusão de colméia'}
             modalMessage={'Deseja realmente excluir este colméia?'}
-            onConfirm={() => console.log('delete')}
+            onConfirm={() => deleteHiveRequest.mutateAsync()}
             isLoading={false}
           >
             Deletar Item
@@ -51,13 +88,12 @@ const DetailHive: React.FC = () => {
           <Grid item xs={12}>
             <Card title="Colméia">
               <CardContent>
-                {loading ? (
+                {fetchHive.isLoading ? (
                   <Box
                     sx={{
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      height: '100px',
                     }}
                   >
                     <CircularProgress />
@@ -81,19 +117,7 @@ const DetailHive: React.FC = () => {
                           mb={0.5}
                           fontWeight={600}
                         >
-                          teste
-                        </Typography>
-                      </Grid>
-                      <Grid item lg={6} xs={12} mt={4}>
-                        <Typography variant="body2" color="text.secondary">
-                          Email do responsável
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          fontWeight={600}
-                          mb={0.5}
-                        >
-                          teste
+                          {fetchHive.data?.id}
                         </Typography>
                       </Grid>
                       <Grid item lg={6} xs={12} mt={4}>
@@ -105,7 +129,19 @@ const DetailHive: React.FC = () => {
                           fontWeight={600}
                           mb={0.5}
                         >
-                          teste
+                          {fetchHive.data?.name}
+                        </Typography>
+                      </Grid>
+                      <Grid item lg={6} xs={12} mt={4}>
+                        <Typography variant="body2" color="text.secondary">
+                          Email do responsável
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight={600}
+                          mb={0.5}
+                        >
+                          {fetchHive.data?.responsible?.email}
                         </Typography>
                       </Grid>
                       <Grid item lg={6} xs={12} mt={4}>
@@ -117,7 +153,19 @@ const DetailHive: React.FC = () => {
                           mb={0.5}
                           fontWeight={600}
                         >
-                          teste
+                          <ChipStatusHive status={fetchHive.data?.status} />
+                        </Typography>
+                      </Grid>
+                      <Grid item lg={6} xs={12} mt={4}>
+                        <Typography variant="body2" color="text.secondary">
+                          Descrição da colméia
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight={600}
+                          mb={0.5}
+                        >
+                          {fetchHive.data?.description}
                         </Typography>
                       </Grid>
                     </Grid>

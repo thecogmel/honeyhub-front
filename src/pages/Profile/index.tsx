@@ -1,31 +1,72 @@
 import React from 'react';
 
 import {
+  Box,
   Button,
   Card,
   CardContent,
+  FormHelperText,
   Grid,
   MenuItem,
   Select,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
+import { FormikProvider, useFormik } from 'formik';
+import * as yup from 'yup';
+
+import { useAuth } from '@contexts/Auth';
 
 import Breadcrumb from '@components/Breadcrumb';
 import { CustomFormLabel } from '@components/Label';
 import ParentCard from '@components/ParentCard';
 
+import { enums, errors } from '@utils';
+
+import routes from './routes';
+
 const Profile: React.FC = () => {
-  const BCrumb = [
-    {
-      to: '/',
-      title: 'Home',
+  const { userInfo } = useAuth();
+  const passwordFormik = useFormik({
+    initialValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
     },
-    {
-      title: 'Perfil',
+    validationSchema: yup.object({
+      currentPassword: yup.string().required(errors.required),
+      newPassword: yup.string().required(errors.required),
+      confirmNewPassword: yup
+        .string()
+        .oneOf([yup.ref('password')], errors.passwordConfirm)
+        .required(errors.required),
+    }),
+    onSubmit: (values) => {
+      console.log('values', values);
     },
-  ];
+  });
+  console.log(passwordFormik.errors);
+
+  const baseInfoFormik = useFormik({
+    initialValues: {
+      name: '',
+      username: '',
+      email: '',
+      role: '',
+      ...userInfo,
+    },
+    validationSchema: yup.object({
+      name: yup.string().required(errors.required),
+      username: yup.string().required(errors.required),
+      email: yup.string().email(errors.email).trim().required(errors.required),
+      role: yup.string().required(errors.required),
+    }),
+    onSubmit: (values) => {
+      console.log('values', values);
+    },
+  });
   return (
     <>
       <Grid container justifyContent={'space-between'} my={5}>
@@ -33,12 +74,12 @@ const Profile: React.FC = () => {
           <Breadcrumb
             title="Perfil"
             subtitle="Aqui você encontrará as informações do seu perfil"
-            items={BCrumb}
+            items={routes}
           />
         </Grid>
       </Grid>
 
-      <ParentCard title="Informações pessoais">
+      <ParentCard title="Dados sobre o seu perfil">
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Card>
@@ -49,48 +90,107 @@ const Profile: React.FC = () => {
                 <Typography color="textSecondary" mb={3}>
                   Para mudar sua senha, confirme aqui
                 </Typography>
-                <form>
+                <FormikProvider value={passwordFormik}>
                   <CustomFormLabel
                     sx={{
                       mt: 0,
                     }}
-                    htmlFor="text-cpwd"
+                    htmlFor="currentPassword"
                   >
-                    Current Password
+                    Senha atual
                   </CustomFormLabel>
                   <TextField
-                    id="text-cpwd"
-                    value="MathewAnderson"
+                    id="currentPassword"
+                    name="currentPassword"
+                    value={passwordFormik.values.currentPassword}
+                    onChange={passwordFormik.handleChange}
+                    onBlur={passwordFormik.handleBlur}
+                    error={
+                      passwordFormik.touched.currentPassword &&
+                      Boolean(passwordFormik.errors.currentPassword)
+                    }
+                    helperText={
+                      passwordFormik.touched.currentPassword &&
+                      passwordFormik.errors.currentPassword
+                    }
                     variant="outlined"
                     fullWidth
                     type="password"
                   />
                   {/* 2 */}
-                  <CustomFormLabel htmlFor="text-npwd">
-                    New Password
+                  <CustomFormLabel htmlFor="newPassword">
+                    Nova senha
                   </CustomFormLabel>
                   <TextField
-                    id="text-npwd"
-                    value="MathewAnderson"
+                    id="newPassword"
+                    name="newPassword"
+                    value={passwordFormik.values.newPassword}
+                    onChange={passwordFormik.handleChange}
+                    onBlur={passwordFormik.handleBlur}
+                    error={
+                      passwordFormik.touched.newPassword &&
+                      Boolean(passwordFormik.errors.newPassword)
+                    }
+                    helperText={
+                      passwordFormik.touched.newPassword &&
+                      passwordFormik.errors.newPassword
+                    }
                     variant="outlined"
                     fullWidth
                     type="password"
                   />
                   {/* 3 */}
-                  <CustomFormLabel htmlFor="text-conpwd">
-                    Confirm Password
+                  <CustomFormLabel htmlFor="confirmNewPassword">
+                    Confirmação de nova senha
                   </CustomFormLabel>
                   <TextField
-                    id="text-conpwd"
-                    value="MathewAnderson"
+                    id="confirmNewPassword"
+                    name="confirmNewPassword"
+                    value={passwordFormik.values.confirmNewPassword}
+                    onChange={passwordFormik.handleChange}
+                    onBlur={passwordFormik.handleBlur}
+                    error={
+                      passwordFormik.touched.confirmNewPassword &&
+                      Boolean(passwordFormik.errors.confirmNewPassword)
+                    }
+                    helperText={
+                      passwordFormik.touched.confirmNewPassword &&
+                      passwordFormik.errors.confirmNewPassword
+                    }
                     variant="outlined"
                     fullWidth
                     type="password"
                   />
-                </form>
+                </FormikProvider>
+                <Grid item>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{ justifyContent: 'end' }}
+                    mt={3}
+                  >
+                    <Button size="large" variant="text" color="error">
+                      Voltar
+                    </Button>
+                    <Tooltip title="Em construção!" arrow>
+                      <Box>
+                        <Button
+                          disabled
+                          size="large"
+                          variant="contained"
+                          color="primary"
+                          onClick={() => passwordFormik.handleSubmit()}
+                        >
+                          Salvar senha
+                        </Button>
+                      </Box>
+                    </Tooltip>
+                  </Stack>
+                </Grid>
               </CardContent>
             </Card>
           </Grid>
+
           {/* Edit Details */}
           <Grid item xs={12}>
             <Card>
@@ -101,20 +201,31 @@ const Profile: React.FC = () => {
                 <Typography color="textSecondary" mb={3}>
                   Para alterar suas informações pessoais, confirme aqui
                 </Typography>
-                <form>
+                <FormikProvider value={baseInfoFormik}>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                       <CustomFormLabel
                         sx={{
                           mt: 0,
                         }}
-                        htmlFor="text-name"
+                        htmlFor="name"
                       >
-                        Your Name
+                        Nome
                       </CustomFormLabel>
                       <TextField
-                        id="text-name"
-                        value="Mathew Anderson"
+                        id="name"
+                        name="name"
+                        value={baseInfoFormik.values.name}
+                        onChange={baseInfoFormik.handleChange}
+                        onBlur={baseInfoFormik.handleBlur}
+                        error={
+                          baseInfoFormik.touched.name &&
+                          Boolean(baseInfoFormik.errors.name)
+                        }
+                        helperText={
+                          baseInfoFormik.touched.name &&
+                          baseInfoFormik.errors.name
+                        }
                         variant="outlined"
                         fullWidth
                       />
@@ -125,58 +236,27 @@ const Profile: React.FC = () => {
                         sx={{
                           mt: 0,
                         }}
-                        htmlFor="text-store-name"
+                        htmlFor="username"
                       >
-                        Store Name
+                        Username
                       </CustomFormLabel>
                       <TextField
-                        id="text-store-name"
-                        value="Maxima Studio"
+                        id="username"
+                        name="username"
+                        value={baseInfoFormik.values.username}
+                        onChange={baseInfoFormik.handleChange}
+                        onBlur={baseInfoFormik.handleBlur}
+                        error={
+                          baseInfoFormik.touched.username &&
+                          Boolean(baseInfoFormik.errors.username)
+                        }
+                        helperText={
+                          baseInfoFormik.touched.username &&
+                          baseInfoFormik.errors.username
+                        }
                         variant="outlined"
                         fullWidth
                       />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      {/* 3 */}
-                      <CustomFormLabel
-                        sx={{
-                          mt: 0,
-                        }}
-                        htmlFor="text-location"
-                      >
-                        Location
-                      </CustomFormLabel>
-                      <Select
-                        fullWidth
-                        id="text-location"
-                        variant="outlined"
-                        value={location}
-                        onChange={() => {}}
-                      >
-                        <MenuItem key={'option.value'} value={'option.value'}>
-                          {'option.label'}
-                        </MenuItem>
-                      </Select>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      {/* 4 */}
-                      <CustomFormLabel
-                        sx={{
-                          mt: 0,
-                        }}
-                        htmlFor="text-currency"
-                      >
-                        Currency
-                      </CustomFormLabel>
-                      <Select
-                        fullWidth
-                        id="text-currency"
-                        variant="outlined"
-                        value={''}
-                        onChange={() => {}}
-                      >
-                        <MenuItem value={'option.value'}>option.label</MenuItem>
-                      </Select>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       {/* 5 */}
@@ -184,68 +264,89 @@ const Profile: React.FC = () => {
                         sx={{
                           mt: 0,
                         }}
-                        htmlFor="text-email"
+                        htmlFor="email"
                       >
                         Email
                       </CustomFormLabel>
                       <TextField
-                        id="text-email"
-                        value="info@modernize.com"
+                        id="email"
+                        name="email"
+                        value={baseInfoFormik.values.email}
+                        onChange={baseInfoFormik.handleChange}
+                        onBlur={baseInfoFormik.handleBlur}
+                        error={
+                          baseInfoFormik.touched.email &&
+                          Boolean(baseInfoFormik.errors.email)
+                        }
+                        helperText={
+                          baseInfoFormik.touched.email &&
+                          baseInfoFormik.errors.email
+                        }
                         variant="outlined"
                         fullWidth
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      {/* 6 */}
+                      {/* 4 */}
                       <CustomFormLabel
                         sx={{
                           mt: 0,
                         }}
-                        htmlFor="text-phone"
+                        htmlFor="role"
                       >
-                        Phone
+                        Cargo
                       </CustomFormLabel>
-                      <TextField
-                        id="text-phone"
-                        value="+91 12345 65478"
-                        variant="outlined"
+                      <Select
+                        disabled
+                        id="role"
+                        name="role"
+                        value={baseInfoFormik.values.role}
+                        onChange={baseInfoFormik.handleChange}
+                        onBlur={baseInfoFormik.handleBlur}
+                        error={
+                          baseInfoFormik.touched.role &&
+                          Boolean(baseInfoFormik.errors.role)
+                        }
                         fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      {/* 7 */}
-                      <CustomFormLabel
-                        sx={{
-                          mt: 0,
-                        }}
-                        htmlFor="text-address"
+                        variant="outlined"
                       >
-                        Address
-                      </CustomFormLabel>
-                      <TextField
-                        id="text-address"
-                        value="814 Howard Street, 120065, India"
-                        variant="outlined"
-                        fullWidth
-                      />
+                        {Object.values(enums.EUserRole).map((role) => (
+                          <MenuItem key={role} value={role}>
+                            {role}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {baseInfoFormik.touched.role &&
+                        baseInfoFormik.errors.role && (
+                          <FormHelperText error>
+                            {baseInfoFormik.errors.role}
+                          </FormHelperText>
+                        )}
                     </Grid>
                   </Grid>
-                </form>
+                </FormikProvider>
+                <Grid item>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{ justifyContent: 'end' }}
+                    mt={3}
+                  >
+                    <Button size="large" variant="text" color="error">
+                      Voltar
+                    </Button>
+                    <Button
+                      size="large"
+                      variant="contained"
+                      color="primary"
+                      onClick={() => baseInfoFormik.handleSubmit()}
+                    >
+                      Salvar dados
+                    </Button>
+                  </Stack>
+                </Grid>
               </CardContent>
             </Card>
-            <Stack
-              direction="row"
-              spacing={2}
-              sx={{ justifyContent: 'end' }}
-              mt={3}
-            >
-              <Button size="large" variant="contained" color="primary">
-                Save
-              </Button>
-              <Button size="large" variant="text" color="error">
-                Cancel
-              </Button>
-            </Stack>
           </Grid>
         </Grid>
       </ParentCard>

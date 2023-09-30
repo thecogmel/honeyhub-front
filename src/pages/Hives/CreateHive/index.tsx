@@ -2,8 +2,10 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+
+import { useHives } from '@hooks';
 
 import Breadcrumb from '@components/Breadcrumb';
 
@@ -12,14 +14,20 @@ import routes from './routes';
 
 const CreateHive: React.FC = () => {
   const navigate = useNavigate();
-  const createHiveRequest = useMutation(async (values) => console.log(values), {
-    onSuccess: () => {
-      enqueueSnackbar('Colméia cadastrada com sucesso', {
-        variant: 'success',
-      });
-      navigate(-1);
-    },
-  });
+  const { createHive } = useHives();
+  const queryClient = useQueryClient();
+  const createHiveRequest = useMutation(
+    (hive: HiveFormValues) => createHive(hive),
+    {
+      onSuccess: () => {
+        enqueueSnackbar('Colméia cadastrada com sucesso', {
+          variant: 'success',
+        });
+        queryClient.invalidateQueries(['hives']);
+        navigate(-1);
+      },
+    }
+  );
   return (
     <>
       <Grid container justifyContent={'space-between'} my={5}>

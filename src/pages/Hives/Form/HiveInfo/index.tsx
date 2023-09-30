@@ -44,14 +44,14 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
       name: '',
       description: '',
       status: '',
-      responsible_user: 0,
+      responsible: 0,
       ...initialValues,
     },
     validationSchema: yup.object({
       name: yup.string().required(errors.required),
       description: yup.string().required(errors.required),
       status: yup.string().required(errors.required),
-      responsible_user: yup
+      responsible: yup
         .number()
         .min(1, 'Selecione um usuário')
         .required(errors.required),
@@ -221,19 +221,19 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                           sx={{
                             mt: 0,
                           }}
-                          htmlFor="responsible_user"
+                          htmlFor="responsible"
                         >
                           Usuário responsável *
                         </CustomFormLabel>
                         <Select
-                          id="responsible_user"
-                          name="responsible_user"
-                          value={formik.values.responsible_user}
+                          id="responsible"
+                          name="responsible"
+                          value={formik.values.responsible}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           error={
-                            formik.touched.responsible_user &&
-                            Boolean(formik.errors.responsible_user)
+                            formik.touched.responsible &&
+                            Boolean(formik.errors.responsible)
                           }
                           fullWidth
                           variant="outlined"
@@ -245,10 +245,10 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                             </MenuItem>
                           ))}
                         </Select>
-                        {formik.touched.responsible_user &&
-                          formik.errors.responsible_user && (
+                        {formik.touched.responsible &&
+                          formik.errors.responsible && (
                             <FormHelperText sx={{ marginLeft: 2 }} error>
-                              {formik.errors.responsible_user}
+                              {formik.errors.responsible}
                             </FormHelperText>
                           )}
                       </Grid>

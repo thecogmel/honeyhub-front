@@ -10,7 +10,7 @@ import Breadcrumb from '@components/Breadcrumb';
 import HiveInfo from '../Form/HiveInfo';
 import routes from './routes';
 
-const CreateHive: React.FC = () => {
+const EditHive: React.FC = () => {
   const navigate = useNavigate();
   const createHiveRequest = useMutation(async (values) => console.log(values), {
     onSuccess: () => {
@@ -26,7 +26,7 @@ const CreateHive: React.FC = () => {
         <Grid item xs={6}>
           <Breadcrumb
             title="Colmeias"
-            subtitle="Aqui você cadastrará uma nova colméia"
+            subtitle="Aqui você edita uma colméia existente"
             items={routes}
           />
         </Grid>
@@ -37,4 +37,4 @@ const CreateHive: React.FC = () => {
   );
 };
 
-export default CreateHive;
+export default EditHive;

@@ -9,14 +9,18 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 import Breadcrumb from '@components/Breadcrumb';
 import DeleteButton from '@components/DeleteButton';
 import ParentCard from '@components/ParentCard';
 
+import RoutesPath from '@router/routes';
+
 import routes from './routes';
 
 const DetailHive: React.FC = () => {
+  const navigate = useNavigate();
   const loading = false;
   return (
     <>
@@ -25,7 +29,11 @@ const DetailHive: React.FC = () => {
           <Breadcrumb title="Colmeias" items={routes} />
         </Grid>
         <Grid item>
-          <Button size="large" onClick={() => {}} variant="outlined">
+          <Button
+            size="large"
+            onClick={() => navigate(RoutesPath.private.editHive.path)}
+            variant="outlined"
+          >
             Editar colméia
           </Button>
           <DeleteButton

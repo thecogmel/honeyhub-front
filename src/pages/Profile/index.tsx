@@ -47,7 +47,6 @@ const Profile: React.FC = () => {
       console.log('values', values);
     },
   });
-  console.log(passwordFormik.errors);
 
   const baseInfoFormik = useFormik({
     initialValues: {
@@ -335,14 +334,19 @@ const Profile: React.FC = () => {
                     <Button size="large" variant="text" color="error">
                       Voltar
                     </Button>
-                    <Button
-                      size="large"
-                      variant="contained"
-                      color="primary"
-                      onClick={() => baseInfoFormik.handleSubmit()}
-                    >
-                      Salvar dados
-                    </Button>
+                    <Tooltip title="Em construção!" arrow>
+                      <Box>
+                        <Button
+                          disabled
+                          size="large"
+                          variant="contained"
+                          color="primary"
+                          onClick={() => baseInfoFormik.handleSubmit()}
+                        >
+                          Salvar dados
+                        </Button>
+                      </Box>
+                    </Tooltip>
                   </Stack>
                 </Grid>
               </CardContent>

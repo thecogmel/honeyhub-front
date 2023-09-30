@@ -9,6 +9,7 @@ export const endpoints = {
     login: '/login/',
     profile: '/users/1/',
     register: '/auth/register/',
+    users: '/users/',
     resetPassword: '/auth/reset-password/',
     changePassword: '/auth/update-password/',
     confirmEmail: '/auth/confirm-email/',

@@ -3,8 +3,6 @@ import React from 'react';
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   Chip,
   CircularProgress,
   FormHelperText,
@@ -23,7 +21,7 @@ import { useAuthentication } from '@hooks';
 import { CustomFormLabel } from '@components/Label';
 import ParentCard from '@components/ParentCard';
 
-import { errors } from '@utils';
+import { enums, errors } from '@utils';
 
 interface HiveInfoProps {
   initialValues?: HiveFormValues;
@@ -42,19 +40,21 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
   const formik = useFormik({
     initialValues: {
       name: '',
-      description: '',
       status: '',
-      responsible: 0,
+      queen_status: '',
+      q_total: 0,
+      q_cf: 0,
+      q_ca: 0,
+      q_cv: 0,
+      q_ci: 0,
+      comments: '',
       ...initialValues,
     },
     validationSchema: yup.object({
       name: yup.string().required(errors.required),
-      description: yup.string().required(errors.required),
+      comments: yup.string().required(errors.required),
       status: yup.string().required(errors.required),
-      responsible: yup
-        .number()
-        .min(1, 'Selecione um usuário')
-        .required(errors.required),
+      queen_status: yup.string().required(errors.required),
     }),
     onSubmit: (values) => {
       createRequest.mutate(values);
@@ -64,7 +64,7 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
   return (
     <FormikProvider value={formik}>
       <ParentCard
-        title="Detalhamento da colméia"
+        title="Colméia"
         footer={
           <>
             <Button
@@ -89,174 +89,302 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
           </>
         }
       >
-        <Grid container spacing={3}>
+        <Grid container spacing={3} m={3}>
           <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                {createRequest.isLoading || fetchUsers.isLoading ? (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '100px',
-                    }}
-                  >
-                    <CircularProgress />
-                  </Box>
-                ) : (
-                  <Box
-                    sx={{
-                      overflow: {
-                        xs: 'auto',
-                        sm: 'unset',
-                      },
-                    }}
-                  >
-                    <Grid container spacing={3}>
-                      <Grid item lg={6} md={12} sm={12} xs={12}>
-                        <CustomFormLabel
-                          sx={{
-                            mt: 0,
-                          }}
-                          htmlFor="name"
-                        >
-                          Nome da colméia *
-                        </CustomFormLabel>
+            {createRequest.isLoading || fetchUsers.isLoading ? (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100px',
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  overflow: {
+                    xs: 'auto',
+                    sm: 'unset',
+                  },
+                }}
+              >
+                <Grid container spacing={3}>
+                  <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="name"
+                    >
+                      Nome da colméia *
+                    </CustomFormLabel>
 
-                        <TextField
-                          id="name"
-                          name="name"
-                          value={formik.values.name}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={
-                            formik.touched.name && Boolean(formik.errors.name)
-                          }
-                          helperText={formik.touched.name && formik.errors.name}
+                    <TextField
+                      id="name"
+                      name="name"
+                      value={formik.values.name}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.name && Boolean(formik.errors.name)}
+                      helperText={formik.touched.name && formik.errors.name}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="status"
+                    >
+                      Status *
+                    </CustomFormLabel>
+                    <Select
+                      id="status"
+                      name="status"
+                      value={formik.values.status}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.status && Boolean(formik.errors.status)
+                      }
+                      fullWidth
+                      variant="outlined"
+                    >
+                      <MenuItem value={enums.EHiveStatus.CAPTURE}>
+                        <Chip
+                          label="Captura"
+                          color="warning"
                           variant="outlined"
-                          fullWidth
+                          size="small"
                         />
-                      </Grid>
-                      <Grid item lg={6} md={12} sm={12} xs={12}>
-                        <CustomFormLabel
-                          sx={{
-                            mt: 0,
-                          }}
-                          htmlFor="description"
-                        >
-                          Descrição*
-                        </CustomFormLabel>
-                        <TextField
-                          id="description"
-                          name="description"
-                          value={formik.values.description}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={
-                            formik.touched.description &&
-                            Boolean(formik.errors.description)
-                          }
-                          helperText={
-                            formik.touched.description &&
-                            formik.errors.description
-                          }
+                      </MenuItem>
+                      <MenuItem value={enums.EHiveStatus.DEVELOPMENT}>
+                        <Chip
+                          label="Desenvolvimento"
+                          color="info"
                           variant="outlined"
-                          fullWidth
                         />
-                      </Grid>
-                      <Grid item lg={6} md={12} sm={12} xs={12}>
-                        <CustomFormLabel
-                          sx={{
-                            mt: 0,
-                          }}
-                          htmlFor="status"
-                        >
-                          Status *
-                        </CustomFormLabel>
-                        <Select
-                          id="status"
-                          name="status"
-                          value={formik.values.status}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={
-                            formik.touched.status &&
-                            Boolean(formik.errors.status)
-                          }
-                          fullWidth
+                      </MenuItem>
+                      <MenuItem value={enums.EHiveStatus.PRODUCTIVE}>
+                        <Chip
+                          label="Produtiva"
+                          color="success"
                           variant="outlined"
-                        >
-                          <MenuItem value={'HEALTHY'}>
-                            <Chip
-                              label="Saudável"
-                              color="success"
-                              variant="outlined"
-                              size="small"
-                            />
-                          </MenuItem>
-                          <MenuItem value={'DECLINING'}>
-                            <Chip
-                              label="Declínio"
-                              color="warning"
-                              variant="outlined"
-                            />
-                          </MenuItem>
-                          <MenuItem value={'DEAD_OR_ABANDONED'}>
-                            <Chip
-                              label="Morta ou abandonada"
-                              color="error"
-                              variant="outlined"
-                            />
-                          </MenuItem>
-                        </Select>
-                        {formik.touched.status && formik.errors.status && (
-                          <FormHelperText sx={{ marginLeft: 2 }} error>
-                            {formik.errors.status}
-                          </FormHelperText>
-                        )}
-                      </Grid>
-                      <Grid item lg={6} md={12} sm={12} xs={12}>
-                        <CustomFormLabel
-                          sx={{
-                            mt: 0,
-                          }}
-                          htmlFor="responsible"
-                        >
-                          Usuário responsável *
-                        </CustomFormLabel>
-                        <Select
-                          id="responsible"
-                          name="responsible"
-                          value={formik.values.responsible}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={
-                            formik.touched.responsible &&
-                            Boolean(formik.errors.responsible)
-                          }
-                          fullWidth
+                        />
+                      </MenuItem>
+
+                      <MenuItem value={enums.EHiveStatus.EMPTY_BOX}>
+                        <Chip
+                          label="Caixa vazia"
+                          color="error"
                           variant="outlined"
-                        >
-                          <MenuItem value={0}>Selecione um usuário</MenuItem>
-                          {fetchUsers.data?.map((user) => (
-                            <MenuItem key={user.id} value={user.id}>
-                              {user.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                        {formik.touched.responsible &&
-                          formik.errors.responsible && (
-                            <FormHelperText sx={{ marginLeft: 2 }} error>
-                              {formik.errors.responsible}
-                            </FormHelperText>
-                          )}
-                      </Grid>
-                    </Grid>
-                  </Box>
-                )}
-              </CardContent>
-            </Card>
+                        />
+                      </MenuItem>
+                    </Select>
+                    {formik.touched.status && formik.errors.status && (
+                      <FormHelperText sx={{ marginLeft: 2 }} error>
+                        {formik.errors.status}
+                      </FormHelperText>
+                    )}
+                  </Grid>
+                  <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="queen_status"
+                    >
+                      Status da rainha *
+                    </CustomFormLabel>
+                    <Select
+                      id="queen_status"
+                      name="queen_status"
+                      value={formik.values.queen_status}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.queen_status &&
+                        Boolean(formik.errors.queen_status)
+                      }
+                      fullWidth
+                      variant="outlined"
+                    >
+                      <MenuItem value={enums.EHiveGenericStatus.GOOD}>
+                        <Chip
+                          label="Bom"
+                          color="success"
+                          variant="outlined"
+                          size="small"
+                        />
+                      </MenuItem>
+                      <MenuItem value={enums.EHiveGenericStatus.REGULAR}>
+                        <Chip
+                          label="Regular"
+                          color="warning"
+                          variant="outlined"
+                        />
+                      </MenuItem>
+                      <MenuItem value={enums.EHiveGenericStatus.WEAK}>
+                        <Chip label="Fraca" color="error" variant="outlined" />
+                      </MenuItem>
+                    </Select>
+                    {formik.touched.status && formik.errors.status && (
+                      <FormHelperText sx={{ marginLeft: 2 }} error>
+                        {formik.errors.status}
+                      </FormHelperText>
+                    )}
+                  </Grid>
+                  <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="q_total"
+                    >
+                      Q Total
+                    </CustomFormLabel>
+                    <TextField
+                      id="q_total"
+                      name="q_total"
+                      type="number"
+                      value={formik.values.q_total}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.q_total && Boolean(formik.errors.q_total)
+                      }
+                      helperText={
+                        formik.touched.q_total && formik.errors.q_total
+                      }
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="q_cf"
+                    >
+                      Q CF
+                    </CustomFormLabel>
+                    <TextField
+                      id="q_cf"
+                      name="q_cf"
+                      type="number"
+                      value={formik.values.q_cf}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.q_cf && Boolean(formik.errors.q_cf)}
+                      helperText={formik.touched.q_cf && formik.errors.q_cf}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="q_ca"
+                    >
+                      Q CA
+                    </CustomFormLabel>
+                    <TextField
+                      id="q_ca"
+                      name="q_ca"
+                      type="number"
+                      value={formik.values.q_ca}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.q_ca && Boolean(formik.errors.q_ca)}
+                      helperText={formik.touched.q_ca && formik.errors.q_ca}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="q_cv"
+                    >
+                      Q CV
+                    </CustomFormLabel>
+                    <TextField
+                      id="q_cv"
+                      name="q_cv"
+                      type="number"
+                      value={formik.values.q_cv}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.q_cv && Boolean(formik.errors.q_cv)}
+                      helperText={formik.touched.q_cv && formik.errors.q_cv}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="q_ci"
+                    >
+                      Q CI
+                    </CustomFormLabel>
+                    <TextField
+                      id="q_ci"
+                      name="q_ci"
+                      type="number"
+                      value={formik.values.q_ci}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.q_ci && Boolean(formik.errors.q_ci)}
+                      helperText={formik.touched.q_ci && formik.errors.q_ci}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+
+                  <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <CustomFormLabel
+                      sx={{
+                        mt: 0,
+                      }}
+                      htmlFor="comments"
+                    >
+                      Descrição*
+                    </CustomFormLabel>
+                    <TextField
+                      id="comments"
+                      name="comments"
+                      value={formik.values.comments}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.comments &&
+                        Boolean(formik.errors.comments)
+                      }
+                      helperText={
+                        formik.touched.comments && formik.errors.comments
+                      }
+                      variant="outlined"
+                      fullWidth
+                      multiline
+                      rows={4}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            )}
           </Grid>
         </Grid>
       </ParentCard>

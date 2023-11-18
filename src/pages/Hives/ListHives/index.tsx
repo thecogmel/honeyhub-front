@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Box,
   Button,
   Card,
   Grid,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -14,6 +18,11 @@ import {
   Typography,
 } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
+import {
+  MdMoreVert,
+  MdOutlineHive,
+  MdOutlineRemoveRedEye,
+} from 'react-icons/md';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,6 +33,8 @@ import ChipStatusHive from '@components/ChipStatusHive';
 import ParentCard from '@components/ParentCard';
 
 import RoutesPath from '@router/routes';
+
+import CollectionDialog from '../CollectionDialog';
 
 const BCrumb = [
   {
@@ -38,6 +49,20 @@ const BCrumb = [
 const Hive: React.FC = () => {
   const navigate = useNavigate();
   const { listHives } = useHives();
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleOpenCollectDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseCollectDialog = () => {
+    setOpenDialog(false);
+  };
 
   const fecthHives = useQuery('hives', listHives, {
     onError: () => {
@@ -89,21 +114,22 @@ const Hive: React.FC = () => {
                     <TableHead>
                       <TableRow>
                         <TableCell>
-                          <Typography variant="h6">ID</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="h6">Nome</Typography>
+                          <Typography variant="h6">Código</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography variant="h6">
-                            Email responsável
+                            Status da colméia
                           </Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant="h6">Status</Typography>
+                          <Typography variant="h6">
+                            Última atualização
+                          </Typography>
                         </TableCell>
+                        <TableCell></TableCell>
                       </TableRow>
                     </TableHead>
+
                     <TableBody>
                       {fecthHives.data?.map((hive) => (
                         <TableRow
@@ -113,35 +139,72 @@ const Hive: React.FC = () => {
                             '&:last-child td, &:last-child th': { border: 0 },
                             cursor: 'pointer',
                           }}
-                          onClick={() =>
-                            navigate(
-                              RoutesPath.private.detailHive.path.replace(
-                                ':hiveId',
-                                hive.id
-                              )
-                            )
-                          }
                         >
                           <TableCell>
-                            <Typography variant="h6">{hive.id}</Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography
-                              color="textSecondary"
-                              variant="h6"
-                              fontWeight={400}
-                            >
-                              {hive.name}
-                            </Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography color="textSecondary" variant="h6">
-                              {hive.responsible?.email || 'Sem responsável'}
-                            </Typography>
+                            <Typography variant="h6">{hive.name}</Typography>
                           </TableCell>
                           <TableCell>
                             <ChipStatusHive status={hive.status} />
                           </TableCell>
+                          <TableCell>
+                            <Typography variant="h6">
+                              {new Date(hive.modified).toLocaleString('pt-br')}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <IconButton
+                              id="basic-button"
+                              aria-controls={open ? 'basic-menu' : undefined}
+                              aria-haspopup="true"
+                              aria-expanded={open ? 'true' : undefined}
+                              onClick={handleClick}
+                            >
+                              <MdMoreVert width={18} />
+                            </IconButton>
+                            <Menu
+                              id="basic-menu"
+                              anchorEl={anchorEl}
+                              open={open}
+                              onClose={() => setAnchorEl(null)}
+                              MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                              }}
+                            >
+                              <MenuItem
+                                onClick={() => {
+                                  navigate(
+                                    RoutesPath.private.detailHive.path.replace(
+                                      ':hiveId',
+                                      hive.id.toString()
+                                    )
+                                  );
+                                  setAnchorEl(null);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <MdOutlineRemoveRedEye width={18} />
+                                </ListItemIcon>
+                                Visualizar
+                              </MenuItem>
+                              <MenuItem onClick={handleOpenCollectDialog}>
+                                <ListItemIcon>
+                                  <MdOutlineHive width={18} />
+                                </ListItemIcon>
+                                Cadastrar coleta
+                              </MenuItem>
+                              {/*  <MenuItem onClick={handleClose}>
+                                <ListItemIcon>
+                                  <MdOutlineDelete width={18} />
+                                  </ListItemIcon>
+                                  Delete
+                                </MenuItem> */}
+                            </Menu>
+                          </TableCell>
+                          <CollectionDialog
+                            open={openDialog}
+                            handleClose={handleCloseCollectDialog}
+                            hive={hive}
+                          />
                         </TableRow>
                       ))}
                     </TableBody>

@@ -62,12 +62,25 @@ const useHives = () => {
     [request]
   );
 
+  const getHiveMetrics = useCallback(
+    async (hive: string) => {
+      const response = await request<{ collection_average: number }>({
+        method: 'get',
+        url: endpoints.private.hives.metrics.replace(':id', hive),
+      });
+
+      return response.data;
+    },
+    [request]
+  );
+
   return {
     listHives,
     getHive,
     createHive,
     updateHive,
     deleteHive,
+    getHiveMetrics,
   };
 };
 

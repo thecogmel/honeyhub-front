@@ -21,6 +21,14 @@ export const endpoints = {
       create: '/hives/',
       update: '/hives/:id/',
       delete: '/hives/:id/',
+      metrics: '/hives/:id/metrics/',
+    },
+    collections: {
+      list: '/collections/',
+      detail: '/collections/:id/',
+      create: '/collections/',
+      update: '/collections/:id/',
+      delete: '/collections/:id/',
     },
   },
 };

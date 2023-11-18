@@ -1,11 +1,16 @@
 interface Hive {
-  id: string;
+  id: number;
   name: string;
-  description: string;
+  comments: string;
   status: string;
-  responsible?: UserInfo;
-  createdAt: string;
-  updatedAt: string;
+  queen_status: string;
+  q_total?: number;
+  q_cf?: number;
+  q_ca?: number;
+  q_cv?: number;
+  q_ci?: number;
+  created: string;
+  modified: string;
 }
 
 type HiveFormValues = Omit<Hive, 'id' | 'createdAt' | 'updatedAt'>;

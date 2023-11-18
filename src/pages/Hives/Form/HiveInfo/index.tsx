@@ -33,9 +33,9 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
   createRequest,
 }) => {
   const navigate = useNavigate();
-  const { getUsers } = useAuthentication();
+  const { listUsers } = useAuthentication();
 
-  const fetchUsers = useQuery('users', getUsers);
+  const fetchUsers = useQuery('users', listUsers);
 
   const formik = useFormik({
     initialValues: {
@@ -361,7 +361,7 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                       }}
                       htmlFor="comments"
                     >
-                      Descrição*
+                      Descrição
                     </CustomFormLabel>
                     <TextField
                       id="comments"

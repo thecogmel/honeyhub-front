@@ -4,6 +4,10 @@ import DetailHive from '@pages/Hives/DetailHive';
 import EditHive from '@pages/Hives/EditHive';
 import Hive from '@pages/Hives/ListHives';
 import Profile from '@pages/Profile';
+import CreateUser from '@pages/Users/CreateUser';
+import DetailUser from '@pages/Users/DetailUser';
+import EditUser from '@pages/Users/EditUser';
+import Users from '@pages/Users/ListUsers';
 import RoutesPath from '@router/routes';
 
 interface privatePagesProps {
@@ -32,6 +36,22 @@ const privatePages: Array<privatePagesProps> = [
   },
   { route: RoutesPath.private.createHive, component: CreateHive },
   { route: RoutesPath.private.editHive, component: EditHive },
+  {
+    route: RoutesPath.private.user,
+    component: Users,
+  },
+  {
+    route: RoutesPath.private.detailUser,
+    component: DetailUser,
+  },
+  {
+    route: RoutesPath.private.createUser,
+    component: CreateUser,
+  },
+  {
+    route: RoutesPath.private.editUser,
+    component: EditUser,
+  },
 ];
 
 export default privatePages;

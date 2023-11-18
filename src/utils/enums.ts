@@ -4,6 +4,12 @@ export enum EUserRole {
   MEMBER = 'MEMBER',
 }
 
+export const EUserRoleMap = {
+  [EUserRole.ADMIN]: 'Administrador',
+  [EUserRole.SUPPORT]: 'Suporte',
+  [EUserRole.MEMBER]: 'Membro',
+};
+
 export enum EHiveStatus {
   CAPTURE = 'CAPTURE',
   DEVELOPMENT = 'DEVELOPMENT',

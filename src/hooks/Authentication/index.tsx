@@ -78,14 +78,64 @@ const useAuthentication = () => {
     [request]
   );
 
-  const getUsers = useCallback(async () => {
+  const listUsers = useCallback(async () => {
     const response = await request<UserInfo[]>({
       method: 'get',
-      url: endpoints.auth.users,
+      url: endpoints.auth.users.list,
     });
 
     return response.data;
   }, [request]);
+
+  const getUser = useCallback(
+    async (id: string) => {
+      const response = await request<UserInfo>({
+        method: 'get',
+        url: endpoints.auth.users.detail.replace(':id', id.toString()),
+      });
+
+      return response.data;
+    },
+    [request]
+  );
+
+  const createUser = useCallback(
+    async (data: UserFormValues) => {
+      const response = await request({
+        method: 'post',
+        url: endpoints.auth.users.list,
+        data,
+      });
+
+      return response.data;
+    },
+    [request]
+  );
+
+  const updateUser = useCallback(
+    async (id: string, data: UserFormValues) => {
+      const response = await request({
+        method: 'put',
+        url: endpoints.auth.users.detail.replace(':id', id.toString()),
+        data,
+      });
+
+      return response.data;
+    },
+    [request]
+  );
+
+  const deleteUser = useCallback(
+    async (id: string) => {
+      const response = await request({
+        method: 'delete',
+        url: endpoints.auth.users.detail.replace(':id', id.toString()),
+      });
+
+      return response.data;
+    },
+    [request]
+  );
 
   return {
     getProfile,
@@ -93,7 +143,11 @@ const useAuthentication = () => {
     requestChangePassword,
     changePassword,
     confirmEmail,
-    getUsers,
+    listUsers,
+    getUser,
+    createUser,
+    updateUser,
+    deleteUser,
   };
 };
 

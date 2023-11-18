@@ -5,5 +5,5 @@ interface ILogin {
 
 interface ILoginResponse {
   tokens: ITokens;
-  user: IUserInfo;
+  user: UserInfo;
 }

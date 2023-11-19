@@ -1,3 +1,5 @@
+import { enums } from '@utils';
+
 const RoutesPath = {
   auth: {
     root: '/login',
@@ -8,17 +10,76 @@ const RoutesPath = {
   private: {
     home: {
       path: '/dashboard',
+      role: [
+        enums.EUserRole.ADMIN,
+        enums.EUserRole.MEMBER,
+        enums.EUserRole.SUPPORT,
+      ],
     },
-    hive: { path: '/colmeia' },
-    detailHive: { path: '/colmeia/:hiveId/' },
-    createHive: { path: '/colmeia/criar/' },
-    editHive: { path: '/colmeia/editar/:hiveId/' },
-    user: { path: '/usuario' },
-    detailUser: { path: '/usuario/:userId/' },
-    editUser: { path: '/usuario/editar/:userId/' },
-    createUser: { path: '/usuario/criar/' },
-    profile: { path: '/perfil' },
-    logout: { path: '/logout' },
+    hive: {
+      path: '/colmeia',
+      role: [
+        enums.EUserRole.ADMIN,
+        enums.EUserRole.MEMBER,
+        enums.EUserRole.SUPPORT,
+      ],
+    },
+    detailHive: {
+      path: '/colmeia/:hiveId/',
+      role: [
+        enums.EUserRole.ADMIN,
+        enums.EUserRole.MEMBER,
+        enums.EUserRole.SUPPORT,
+      ],
+    },
+    createHive: {
+      path: '/colmeia/criar/',
+      role: [
+        enums.EUserRole.ADMIN,
+        enums.EUserRole.MEMBER,
+        enums.EUserRole.SUPPORT,
+      ],
+    },
+    editHive: {
+      path: '/colmeia/editar/:hiveId/',
+      role: [
+        enums.EUserRole.ADMIN,
+        enums.EUserRole.MEMBER,
+        enums.EUserRole.SUPPORT,
+      ],
+    },
+    user: {
+      path: '/usuario',
+      role: [enums.EUserRole.ADMIN, enums.EUserRole.SUPPORT],
+    },
+    detailUser: {
+      path: '/usuario/:userId/',
+      role: [enums.EUserRole.ADMIN, enums.EUserRole.SUPPORT],
+    },
+    editUser: {
+      path: '/usuario/editar/:userId/',
+      role: [enums.EUserRole.ADMIN, enums.EUserRole.SUPPORT],
+    },
+    createUser: {
+      path: '/usuario/criar/',
+      role: [enums.EUserRole.ADMIN, enums.EUserRole.SUPPORT],
+    },
+    profile: {
+      path: '/perfil',
+      role: [
+        enums.EUserRole.ADMIN,
+        enums.EUserRole.MEMBER,
+        enums.EUserRole.SUPPORT,
+      ],
+    },
+    logout: {
+      path: '/logout',
+      role: [
+        enums.EUserRole.ADMIN,
+        enums.EUserRole.MEMBER,
+        enums.EUserRole.SUPPORT,
+      ],
+    },
   },
 };
 

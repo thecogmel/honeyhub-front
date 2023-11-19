@@ -1,6 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Button, List, ListItem } from '@mui/material';
+import { IconType } from 'react-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@contexts/Auth';
@@ -11,16 +12,28 @@ import img1 from '../../../../assets/images/logos/HoneyHub.svg';
 import { SidebarItems } from './MenuItens';
 import { ImageLogo } from './styles';
 
+interface IMenuItem {
+  name: string;
+  icon: IconType;
+  route: string;
+}
+
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = useAuth();
+  const { userInfo } = useAuth();
 
   const checkRoute = useCallback(
     (route: string) => {
       return location.pathname.split('/')[1] === route.split('/')[1];
     },
     [location.pathname]
+  );
+
+  const menuItems: Array<IMenuItem> = useMemo(
+    () => SidebarItems(userInfo!.role),
+    [userInfo]
   );
 
   return (
@@ -47,7 +60,7 @@ const Sidebar: React.FC = () => {
         />
       </ListItem>
 
-      {SidebarItems.map(({ icon: Icon, name, route }) => (
+      {menuItems.map(({ icon: Icon, name, route }) => (
         <ListItem key={name}>
           <Button
             variant={checkRoute(route) ? 'contained' : 'text'}

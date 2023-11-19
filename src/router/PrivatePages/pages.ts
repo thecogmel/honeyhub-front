@@ -9,10 +9,12 @@ import DetailUser from '@pages/Users/DetailUser';
 import EditUser from '@pages/Users/EditUser';
 import Users from '@pages/Users/ListUsers';
 import RoutesPath from '@router/routes';
+import { enums } from '@utils';
 
 interface privatePagesProps {
   route: {
     path: string;
+    role: Array<enums.EUserRole>;
   };
   component: React.FC<any>;
 }

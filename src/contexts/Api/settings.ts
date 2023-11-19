@@ -7,7 +7,8 @@ export const endpoints = {
   },
   auth: {
     login: '/login/',
-    profile: '/users/1/',
+    profile: '/auth/profile/',
+    profileChangePassword: 'auth/private-reset-password',
     register: '/auth/register/',
     users: {
       list: '/users/',

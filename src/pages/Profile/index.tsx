@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
@@ -15,9 +16,12 @@ import {
   Typography,
 } from '@mui/material';
 import { FormikProvider, useFormik } from 'formik';
+import { enqueueSnackbar } from 'notistack';
+import { useMutation } from 'react-query';
 import * as yup from 'yup';
 
 import { useAuth } from '@contexts/Auth';
+import { useAuthentication } from '@hooks';
 
 import Breadcrumb from '@components/Breadcrumb';
 import { CustomFormLabel } from '@components/Label';
@@ -29,22 +33,39 @@ import routes from './routes';
 
 const Profile: React.FC = () => {
   const { userInfo } = useAuth();
+  const { profileChangePassword } = useAuthentication();
+
+  const requestChangePassword = useMutation(
+    (values: ProfileRequestChangePassword) => profileChangePassword(values),
+    {
+      onSuccess: () => {
+        enqueueSnackbar('Senha alterada com sucesso', { variant: 'success' });
+      },
+      onError: () => {
+        enqueueSnackbar('Erro ao alterar senha', { variant: 'error' });
+      },
+    }
+  );
+
   const passwordFormik = useFormik({
     initialValues: {
-      currentPassword: '',
-      newPassword: '',
-      confirmNewPassword: '',
+      old_password: '',
+      password: '',
+      confirmPassword: '',
     },
     validationSchema: yup.object({
-      currentPassword: yup.string().required(errors.required),
-      newPassword: yup.string().required(errors.required),
-      confirmNewPassword: yup
+      old_password: yup.string().required(errors.required),
+      password: yup.string().required(errors.required),
+      confirmPassword: yup
         .string()
         .oneOf([yup.ref('password')], errors.passwordConfirm)
         .required(errors.required),
     }),
     onSubmit: (values) => {
-      console.log('values', values);
+      requestChangePassword.mutateAsync({
+        old_password: values.old_password,
+        password: values.password,
+      });
     },
   });
 
@@ -94,67 +115,67 @@ const Profile: React.FC = () => {
                     sx={{
                       mt: 0,
                     }}
-                    htmlFor="currentPassword"
+                    htmlFor="old_password"
                   >
                     Senha atual
                   </CustomFormLabel>
                   <TextField
-                    id="currentPassword"
-                    name="currentPassword"
-                    value={passwordFormik.values.currentPassword}
+                    id="old_password"
+                    name="old_password"
+                    value={passwordFormik.values.old_password}
                     onChange={passwordFormik.handleChange}
                     onBlur={passwordFormik.handleBlur}
                     error={
-                      passwordFormik.touched.currentPassword &&
-                      Boolean(passwordFormik.errors.currentPassword)
+                      passwordFormik.touched.old_password &&
+                      Boolean(passwordFormik.errors.old_password)
                     }
                     helperText={
-                      passwordFormik.touched.currentPassword &&
-                      passwordFormik.errors.currentPassword
+                      passwordFormik.touched.old_password &&
+                      passwordFormik.errors.old_password
                     }
                     variant="outlined"
                     fullWidth
                     type="password"
                   />
                   {/* 2 */}
-                  <CustomFormLabel htmlFor="newPassword">
+                  <CustomFormLabel htmlFor="password">
                     Nova senha
                   </CustomFormLabel>
                   <TextField
-                    id="newPassword"
-                    name="newPassword"
-                    value={passwordFormik.values.newPassword}
+                    id="password"
+                    name="password"
+                    value={passwordFormik.values.password}
                     onChange={passwordFormik.handleChange}
                     onBlur={passwordFormik.handleBlur}
                     error={
-                      passwordFormik.touched.newPassword &&
-                      Boolean(passwordFormik.errors.newPassword)
+                      passwordFormik.touched.password &&
+                      Boolean(passwordFormik.errors.password)
                     }
                     helperText={
-                      passwordFormik.touched.newPassword &&
-                      passwordFormik.errors.newPassword
+                      passwordFormik.touched.password &&
+                      passwordFormik.errors.password
                     }
                     variant="outlined"
                     fullWidth
                     type="password"
                   />
                   {/* 3 */}
-                  <CustomFormLabel htmlFor="confirmNewPassword">
+                  <CustomFormLabel htmlFor="confirmPassword">
                     Confirmação de nova senha
                   </CustomFormLabel>
                   <TextField
-                    id="confirmNewPassword"
-                    name="confirmNewPassword"
-                    value={passwordFormik.values.confirmNewPassword}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={passwordFormik.values.confirmPassword}
                     onChange={passwordFormik.handleChange}
                     onBlur={passwordFormik.handleBlur}
                     error={
-                      passwordFormik.touched.confirmNewPassword &&
-                      Boolean(passwordFormik.errors.confirmNewPassword)
+                      passwordFormik.touched.confirmPassword &&
+                      Boolean(passwordFormik.errors.confirmPassword)
                     }
                     helperText={
-                      passwordFormik.touched.confirmNewPassword &&
-                      passwordFormik.errors.confirmNewPassword
+                      passwordFormik.touched.confirmPassword &&
+                      passwordFormik.errors.confirmPassword
                     }
                     variant="outlined"
                     fullWidth
@@ -171,19 +192,18 @@ const Profile: React.FC = () => {
                     <Button size="large" variant="text" color="error">
                       Voltar
                     </Button>
-                    <Tooltip title="Em construção!" arrow>
-                      <Box>
-                        <Button
-                          disabled
-                          size="large"
-                          variant="contained"
-                          color="primary"
-                          onClick={() => passwordFormik.handleSubmit()}
-                        >
-                          Salvar senha
-                        </Button>
-                      </Box>
-                    </Tooltip>
+
+                    <Box>
+                      <LoadingButton
+                        size="large"
+                        variant="contained"
+                        color="primary"
+                        loading={requestChangePassword.isLoading}
+                        onClick={() => passwordFormik.handleSubmit()}
+                      >
+                        Salvar senha
+                      </LoadingButton>
+                    </Box>
                   </Stack>
                 </Grid>
               </CardContent>

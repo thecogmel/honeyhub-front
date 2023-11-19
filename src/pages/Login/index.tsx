@@ -55,7 +55,7 @@ const Login: React.FC = () => {
     initialValues: { email: '', password: '' },
     validationSchema: yup.object({
       email: yup.string().email(errors.email).trim().required(errors.required),
-      password: yup.string().min(8, minLength(8)).required(errors.required),
+      password: yup.string().min(6, minLength(6)).required(errors.required),
     }),
     onSubmit: (values) => {
       onLoginFormSubmit.mutate(values);

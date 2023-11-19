@@ -78,6 +78,19 @@ const useAuthentication = () => {
     [request]
   );
 
+  const profileChangePassword = useCallback(
+    async (data: ProfileRequestChangePassword) => {
+      const response = await request({
+        method: 'post',
+        url: endpoints.auth.profileChangePassword,
+        data,
+      });
+
+      return response.data;
+    },
+    [request]
+  );
+
   const listUsers = useCallback(async () => {
     const response = await request<UserInfo[]>({
       method: 'get',
@@ -142,6 +155,7 @@ const useAuthentication = () => {
     performLogin,
     requestChangePassword,
     changePassword,
+    profileChangePassword,
     confirmEmail,
     listUsers,
     getUser,

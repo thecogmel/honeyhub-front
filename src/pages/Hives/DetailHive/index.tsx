@@ -181,7 +181,7 @@ const DetailHive: React.FC = () => {
                       </Grid>
                       <Grid item lg={6} xs={12} mt={4}>
                         <Typography variant="body2" color="text.secondary">
-                          Q Total
+                          Quadros Totais
                         </Typography>
                         <Typography
                           variant="subtitle1"
@@ -193,7 +193,7 @@ const DetailHive: React.FC = () => {
                       </Grid>
                       <Grid item lg={6} xs={12} mt={4}>
                         <Typography variant="body2" color="text.secondary">
-                          Q ca
+                          Quadros com cria aberta
                         </Typography>
                         <Typography
                           variant="subtitle1"
@@ -205,7 +205,7 @@ const DetailHive: React.FC = () => {
                       </Grid>
                       <Grid item lg={6} xs={12} mt={4}>
                         <Typography variant="body2" color="text.secondary">
-                          Q cf
+                          Quadros com cria fechada
                         </Typography>
                         <Typography
                           variant="subtitle1"
@@ -217,7 +217,7 @@ const DetailHive: React.FC = () => {
                       </Grid>
                       <Grid item lg={6} xs={12} mt={4}>
                         <Typography variant="body2" color="text.secondary">
-                          Q ci
+                          Q i
                         </Typography>
                         <Typography
                           variant="subtitle1"
@@ -229,7 +229,7 @@ const DetailHive: React.FC = () => {
                       </Grid>
                       <Grid item lg={6} xs={12} mt={4}>
                         <Typography variant="body2" color="text.secondary">
-                          Q CV
+                          Quadros com cria vazia
                         </Typography>
                         <Typography
                           variant="subtitle1"
@@ -256,7 +256,7 @@ const DetailHive: React.FC = () => {
 
                     <Grid item lg={6} xs={12} mt={4}>
                       <Typography variant="body2" color="text.secondary">
-                        Data da última atualização
+                        Última atualização
                       </Typography>
                       <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
                         {fetchHive.data?.modified &&

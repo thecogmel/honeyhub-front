@@ -246,7 +246,7 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                       }}
                       htmlFor="q_total"
                     >
-                      Q Total
+                      Quadros totais
                     </CustomFormLabel>
                     <TextField
                       id="q_total"
@@ -272,7 +272,7 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                       }}
                       htmlFor="q_cf"
                     >
-                      Q CF
+                      Quadros com cria fechada
                     </CustomFormLabel>
                     <TextField
                       id="q_cf"
@@ -294,7 +294,7 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                       }}
                       htmlFor="q_ca"
                     >
-                      Q CA
+                      Quadros com cria aberta
                     </CustomFormLabel>
                     <TextField
                       id="q_ca"
@@ -316,7 +316,7 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                       }}
                       htmlFor="q_cv"
                     >
-                      Q CV
+                      Quadros com cria vazia
                     </CustomFormLabel>
                     <TextField
                       id="q_cv"
@@ -338,7 +338,7 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                       }}
                       htmlFor="q_ci"
                     >
-                      Q CI
+                      Q I
                     </CustomFormLabel>
                     <TextField
                       id="q_ci"

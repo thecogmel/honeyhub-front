@@ -22,3 +22,9 @@ export enum EHiveGenericStatus {
   GOOD = 'GOOD',
   WEAK = 'WEAK',
 }
+
+export const EHiveGenericStatusMap = {
+  [EHiveGenericStatus.REGULAR]: 'Regular',
+  [EHiveGenericStatus.GOOD]: 'Bom',
+  [EHiveGenericStatus.WEAK]: 'Fraco',
+};

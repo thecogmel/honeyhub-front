@@ -16,6 +16,7 @@ import useCollection from 'hooks/Collection';
 import { enqueueSnackbar } from 'notistack';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { EHiveStatus } from 'utils/enums';
 
 import { useHives } from '@hooks';
 
@@ -28,6 +29,7 @@ import RoutesPath from '@router/routes';
 
 import CollectionEarned from './CollectionEarned';
 import HistoryCollectionDialog from './HistoryCollectionDialog';
+import HistoryHiveChanges from './HistoryHiveChanges';
 import routes from './routes';
 
 const DetailHive: React.FC = () => {
@@ -167,18 +169,22 @@ const DetailHive: React.FC = () => {
                           {fetchHive.data?.queen_status}
                         </Typography>
                       </Grid>
-                      <Grid item lg={6} xs={12} mt={4}>
-                        <Typography variant="body2" color="text.secondary">
-                          Condição da colméia
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          mb={0.5}
-                          fontWeight={600}
-                        >
-                          <ChipStatusHive status={fetchHive.data?.status} />
-                        </Typography>
-                      </Grid>
+                      {fetchHive.data?.status && (
+                        <Grid item lg={6} xs={12} mt={4}>
+                          <Typography variant="body2" color="text.secondary">
+                            Condição da colméia
+                          </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            mb={0.5}
+                            fontWeight={600}
+                          >
+                            <ChipStatusHive
+                              status={fetchHive.data?.status as EHiveStatus}
+                            />
+                          </Typography>
+                        </Grid>
+                      )}
                       <Grid item lg={6} xs={12} mt={4}>
                         <Typography variant="body2" color="text.secondary">
                           Quadros Totais
@@ -215,18 +221,7 @@ const DetailHive: React.FC = () => {
                           {fetchHive.data?.q_cf}
                         </Typography>
                       </Grid>
-                      <Grid item lg={6} xs={12} mt={4}>
-                        <Typography variant="body2" color="text.secondary">
-                          Q i
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          mb={0.5}
-                          fontWeight={600}
-                        >
-                          {fetchHive.data?.q_ci}
-                        </Typography>
-                      </Grid>
+
                       <Grid item lg={6} xs={12} mt={4}>
                         <Typography variant="body2" color="text.secondary">
                           Quadros com cria vazia
@@ -345,7 +340,8 @@ const DetailHive: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={6}>
+          <HistoryHiveChanges />
+          <Grid item xs={12}>
             {fetchHiveMetrics.isLoading ? (
               <Box
                 sx={{

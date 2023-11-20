@@ -89,7 +89,7 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
           </>
         }
       >
-        <Grid container spacing={3} m={3}>
+        <Grid container spacing={3} p={3}>
           <Grid item xs={12}>
             {createRequest.isLoading || fetchUsers.isLoading ? (
               <Box
@@ -327,28 +327,6 @@ const HiveInfo: React.FC<HiveInfoProps> = ({
                       onBlur={formik.handleBlur}
                       error={formik.touched.q_cv && Boolean(formik.errors.q_cv)}
                       helperText={formik.touched.q_cv && formik.errors.q_cv}
-                      variant="outlined"
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item lg={6} md={12} sm={12} xs={12}>
-                    <CustomFormLabel
-                      sx={{
-                        mt: 0,
-                      }}
-                      htmlFor="q_ci"
-                    >
-                      Q I
-                    </CustomFormLabel>
-                    <TextField
-                      id="q_ci"
-                      name="q_ci"
-                      type="number"
-                      value={formik.values.q_ci}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      error={formik.touched.q_ci && Boolean(formik.errors.q_ci)}
-                      helperText={formik.touched.q_ci && formik.errors.q_ci}
                       variant="outlined"
                       fullWidth
                     />

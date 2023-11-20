@@ -42,7 +42,7 @@ const useHives = () => {
   const updateHive = useCallback(
     async (id: string, data: HiveFormValues) => {
       const response = await request<Hive>({
-        method: 'put',
+        method: 'patch',
         url: endpoints.private.hives.update.replace(':id', id),
         data,
       });
@@ -74,6 +74,18 @@ const useHives = () => {
     [request]
   );
 
+  const getHiveChanges = useCallback(
+    async (hive: string) => {
+      const response = await request<HiveChanges[]>({
+        method: 'get',
+        url: endpoints.private.hives.changes.replace(':id', hive),
+      });
+
+      return response.data;
+    },
+    [request]
+  );
+
   return {
     listHives,
     getHive,
@@ -81,6 +93,7 @@ const useHives = () => {
     updateHive,
     deleteHive,
     getHiveMetrics,
+    getHiveChanges,
   };
 };
 

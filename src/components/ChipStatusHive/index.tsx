@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { Chip, ChipProps } from '@mui/material';
+import { EHiveStatus } from 'utils/enums';
 
 import { enums } from '@utils';
 
 interface ChipStatusHiveProps extends ChipProps {
-  status?: string;
+  status?: EHiveStatus;
 }
 
 const ChipStatusHive: React.FC<ChipStatusHiveProps> = ({
@@ -18,6 +19,8 @@ const ChipStatusHive: React.FC<ChipStatusHiveProps> = ({
         bgcolor:
           status === enums.EHiveStatus.PRODUCTIVE
             ? (theme) => theme.palette.success.light
+            : status === enums.EHiveStatus.DEVELOPMENT
+            ? (theme) => theme.palette.info.light
             : status === enums.EHiveStatus.CAPTURE
             ? (theme) => theme.palette.warning.light
             : status === enums.EHiveStatus.EMPTY_BOX
@@ -26,6 +29,8 @@ const ChipStatusHive: React.FC<ChipStatusHiveProps> = ({
         color:
           status === enums.EHiveStatus.PRODUCTIVE
             ? (theme) => theme.palette.success.main
+            : status === enums.EHiveStatus.DEVELOPMENT
+            ? (theme) => theme.palette.text.secondary
             : status === enums.EHiveStatus.CAPTURE
             ? (theme) => theme.palette.warning.main
             : status === enums.EHiveStatus.EMPTY_BOX
@@ -41,6 +46,8 @@ const ChipStatusHive: React.FC<ChipStatusHiveProps> = ({
           ? 'Captura'
           : status === enums.EHiveStatus.EMPTY_BOX
           ? 'Caixa vazia'
+          : status === enums.EHiveStatus.DEVELOPMENT
+          ? 'Em desenvolvimento'
           : 'Não informado'
       }
       {...props}

@@ -238,3 +238,28 @@ export const formatBankCode = (code: string) => {
 export const generateGoogleMapsLink = (latitude: number, longitude: number) => {
   return `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
 };
+
+export const changeFieldsHelper = (field: string) => {
+  switch (field) {
+    case 'q_total':
+      return 'Quantidade total';
+    case 'q_cf':
+      return 'Quantidade de favos com cria fechada';
+    case 'q_ca':
+      return 'Quantidade de favos com cria aberta';
+    case 'q_cv':
+      return 'Quantidade de favos com cria vazia';
+    case 'queen_status':
+      return 'Status da rainha';
+    case 'status':
+      return 'Status da colmeia';
+    case 'comments':
+      return 'Comentários';
+    case 'name':
+      return 'Nome';
+    case 'modified':
+      return;
+    default:
+      return field;
+  }
+};

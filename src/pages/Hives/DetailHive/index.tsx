@@ -11,6 +11,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
+import { useToggle } from 'ahooks';
 import useCollection from 'hooks/Collection';
 import { enqueueSnackbar } from 'notistack';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -26,6 +27,7 @@ import ParentCard from '@components/ParentCard';
 import RoutesPath from '@router/routes';
 
 import CollectionEarned from './CollectionEarned';
+import HistoryCollectionDialog from './HistoryCollectionDialog';
 import routes from './routes';
 
 const DetailHive: React.FC = () => {
@@ -35,6 +37,8 @@ const DetailHive: React.FC = () => {
   const { getHive, deleteHive, getHiveMetrics } = useHives();
   const { listCollection } = useCollection();
   const queryClient = useQueryClient();
+
+  const [historyCollection, { toggle }] = useToggle(false);
 
   const fetchHive = useQuery(['hive', hiveId!], () => getHive(hiveId!), {
     initialData: location.state as Hive,
@@ -236,7 +240,7 @@ const DetailHive: React.FC = () => {
                         </Typography>
                       </Grid>
 
-                      <Grid item lg={12} xs={12} mt={4}>
+                      <Grid item lg={6} xs={12} mt={4}>
                         <Typography variant="body2" color="text.secondary">
                           Descrição da colméia
                         </Typography>
@@ -249,6 +253,18 @@ const DetailHive: React.FC = () => {
                         </Typography>
                       </Grid>
                     </Grid>
+
+                    <Grid item lg={6} xs={12} mt={4}>
+                      <Typography variant="body2" color="text.secondary">
+                        Data da última atualização
+                      </Typography>
+                      <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
+                        {fetchHive.data?.modified &&
+                          new Date(fetchHive.data.modified).toLocaleString(
+                            'pt-br'
+                          )}
+                      </Typography>
+                    </Grid>
                   </Box>
                 )}
               </CardContent>
@@ -256,7 +272,22 @@ const DetailHive: React.FC = () => {
           </Grid>
           <Grid item xs={6}>
             <Card title="Histórico de coletas">
-              <CardHeader title="Histórico de coletas" />
+              <CardHeader
+                title="Histórico de coletas"
+                subheader="- Últimas 5 alterações"
+                action={
+                  <Button size="small" onClick={toggle}>
+                    Ver todas
+                  </Button>
+                }
+              />
+              {fetchHiveCollection.data && (
+                <HistoryCollectionDialog
+                  open={historyCollection}
+                  handleClose={toggle}
+                  collections={fetchHiveCollection.data}
+                />
+              )}
               <Divider />
               <CardContent>
                 {fetchHiveCollection.isLoading ? (
@@ -278,34 +309,37 @@ const DetailHive: React.FC = () => {
                       },
                     }}
                   >
-                    {fetchHiveCollection.data?.map((item) => (
-                      <Grid container key={item.id}>
-                        <Grid item lg={6} xs={12} mt={4}>
-                          <Typography variant="body2" color="text.secondary">
-                            Quantidade de mel
-                          </Typography>
-                          <Typography
-                            variant="subtitle1"
-                            fontWeight={600}
-                            mb={0.5}
-                          >
-                            {item.quantity} Kg
-                          </Typography>
+                    {fetchHiveCollection.data
+                      ?.slice(-5)
+                      .map((item) => (
+                        <Grid container key={item.id}>
+                          <Grid item lg={6} xs={12} mt={4}>
+                            <Typography variant="body2" color="text.secondary">
+                              Quantidade de mel
+                            </Typography>
+                            <Typography
+                              variant="subtitle1"
+                              fontWeight={600}
+                              mb={0.5}
+                            >
+                              {item.quantity} Kg
+                            </Typography>
+                          </Grid>
+                          <Grid item lg={6} xs={12} mt={4}>
+                            <Typography variant="body2" color="text.secondary">
+                              Data da coleta
+                            </Typography>
+                            <Typography
+                              variant="subtitle1"
+                              fontWeight={600}
+                              mb={0.5}
+                            >
+                              {new Date(item.created).toLocaleString()}
+                            </Typography>
+                          </Grid>
                         </Grid>
-                        <Grid item lg={6} xs={12} mt={4}>
-                          <Typography variant="body2" color="text.secondary">
-                            Data da coleta
-                          </Typography>
-                          <Typography
-                            variant="subtitle1"
-                            fontWeight={600}
-                            mb={0.5}
-                          >
-                            {new Date(item.created).toLocaleString()}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    ))}
+                      ))
+                      .reverse()}
                   </Box>
                 )}
               </CardContent>

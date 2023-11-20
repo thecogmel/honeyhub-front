@@ -244,11 +244,11 @@ export const changeFieldsHelper = (field: string) => {
     case 'q_total':
       return 'Quantidade total';
     case 'q_cf':
-      return 'Quantidade de favos com cria fechada';
+      return 'Quantidade de quadros com cria fechada';
     case 'q_ca':
-      return 'Quantidade de favos com cria aberta';
+      return 'Quantidade de quadros com cria aberta';
     case 'q_cv':
-      return 'Quantidade de favos com cria vazia';
+      return 'Quantidade de quadros com cria vazia';
     case 'queen_status':
       return 'Status da rainha';
     case 'status':

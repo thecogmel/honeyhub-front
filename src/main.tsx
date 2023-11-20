@@ -2,6 +2,7 @@ import React from 'react';
 
 import isPropValid from '@emotion/is-prop-valid';
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Analytics } from '@vercel/analytics/react';
 import { SnackbarProvider } from 'notistack';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -28,6 +29,7 @@ const theme = BuildTheme();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <CssBaseline />
+    <Analytics />
     <ThemeProvider theme={theme}>
       <StyleSheetManager shouldForwardProp={isPropValid}>
         <QueryClientProvider client={queryClient}>

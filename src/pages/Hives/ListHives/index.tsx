@@ -25,6 +25,7 @@ import {
 } from 'react-icons/md';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { EHiveStatus } from 'utils/enums';
 
 import { useHives } from '@hooks';
 
@@ -144,7 +145,9 @@ const Hive: React.FC = () => {
                             <Typography variant="h6">{hive.name}</Typography>
                           </TableCell>
                           <TableCell>
-                            <ChipStatusHive status={hive.status} />
+                            <ChipStatusHive
+                              status={hive.status as EHiveStatus}
+                            />
                           </TableCell>
                           <TableCell>
                             <Typography variant="h6">

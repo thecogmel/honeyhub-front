@@ -52,10 +52,16 @@ const Hive: React.FC = () => {
   const { listHives } = useHives();
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedID, setSelectedID] = useState<number>(0);
+
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: React.SetStateAction<number>
+  ) => {
     setAnchorEl(event.currentTarget);
+    setSelectedID(id);
   };
   const handleOpenCollectDialog = () => {
     setOpenDialog(true);
@@ -72,6 +78,12 @@ const Hive: React.FC = () => {
       });
     },
   });
+
+  const handleSelectedClick = (id: number) => {
+    navigate(
+      RoutesPath.private.detailHive.path.replace(':hiveId', id.toString())
+    );
+  };
 
   return (
     <>
@@ -160,48 +172,10 @@ const Hive: React.FC = () => {
                               aria-controls={open ? 'basic-menu' : undefined}
                               aria-haspopup="true"
                               aria-expanded={open ? 'true' : undefined}
-                              onClick={handleClick}
+                              onClick={(event) => handleClick(event, hive.id)}
                             >
                               <MdMoreVert width={18} />
                             </IconButton>
-                            <Menu
-                              id="basic-menu"
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={() => setAnchorEl(null)}
-                              MenuListProps={{
-                                'aria-labelledby': 'basic-button',
-                              }}
-                            >
-                              <MenuItem
-                                onClick={() => {
-                                  navigate(
-                                    RoutesPath.private.detailHive.path.replace(
-                                      ':hiveId',
-                                      hive.id.toString()
-                                    )
-                                  );
-                                  setAnchorEl(null);
-                                }}
-                              >
-                                <ListItemIcon>
-                                  <MdOutlineRemoveRedEye width={18} />
-                                </ListItemIcon>
-                                Visualizar
-                              </MenuItem>
-                              <MenuItem onClick={handleOpenCollectDialog}>
-                                <ListItemIcon>
-                                  <MdOutlineHive width={18} />
-                                </ListItemIcon>
-                                Cadastrar coleta
-                              </MenuItem>
-                              {/*  <MenuItem onClick={handleClose}>
-                                <ListItemIcon>
-                                  <MdOutlineDelete width={18} />
-                                  </ListItemIcon>
-                                  Delete
-                                </MenuItem> */}
-                            </Menu>
                           </TableCell>
                           <CollectionDialog
                             open={openDialog}
@@ -212,6 +186,28 @@ const Hive: React.FC = () => {
                       ))}
                     </TableBody>
                   </Table>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={() => setAnchorEl(null)}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                  >
+                    <MenuItem onClick={() => handleSelectedClick(selectedID)}>
+                      <ListItemIcon>
+                        <MdOutlineRemoveRedEye width={18} />
+                      </ListItemIcon>
+                      Visualizar
+                    </MenuItem>
+                    <MenuItem onClick={handleOpenCollectDialog}>
+                      <ListItemIcon>
+                        <MdOutlineHive width={18} />
+                      </ListItemIcon>
+                      Cadastrar coleta
+                    </MenuItem>
+                  </Menu>
                 </TableContainer>
               </Card>
             </Box>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Button,
@@ -42,10 +42,23 @@ const Users: React.FC = () => {
   const navigate = useNavigate();
   const { listUsers } = useAuthentication();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedID, setSelectedID] = useState<number>(0);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: React.SetStateAction<number>
+  ) => {
     setAnchorEl(event.currentTarget);
+    setSelectedID(id);
+  };
+
+  const handleSelectedClick = (id: number) => {
+    navigate(
+      RoutesPath.private.detailUser.path.replace(':userId', id.toString())
+    );
+    setAnchorEl(null);
   };
 
   const fetchUsers = useQuery('users', listUsers, {
@@ -131,47 +144,31 @@ const Users: React.FC = () => {
                       aria-controls={open ? 'basic-menu' : undefined}
                       aria-haspopup="true"
                       aria-expanded={open ? 'true' : undefined}
-                      onClick={handleClick}
+                      onClick={(event) => handleClick(event, user.id)}
                     >
                       <MdMoreVert width={18} />
                     </IconButton>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={() => setAnchorEl(null)}
-                      MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                      }}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          navigate(
-                            RoutesPath.private.detailUser.path.replace(
-                              ':userId',
-                              user.id.toString()
-                            )
-                          );
-                          setAnchorEl(null);
-                        }}
-                      >
-                        <ListItemIcon>
-                          <MdOutlineRemoveRedEye width={18} />
-                        </ListItemIcon>
-                        Visualizar
-                      </MenuItem>
-                      {/* <MenuItem onClick={handleOpenCollectDialog}>
-                                <ListItemIcon>
-                                  <MdOutlineHive width={18} />
-                                </ListItemIcon>
-                                Cadastrar coleta
-                              </MenuItem> */}
-                    </Menu>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={() => setAnchorEl(null)}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={() => handleSelectedClick(selectedID)}>
+              <ListItemIcon>
+                <MdOutlineRemoveRedEye width={18} />
+              </ListItemIcon>
+              Visualizar
+            </MenuItem>
+          </Menu>
         </TableContainer>
       </ParentCard>
     </>

@@ -29,9 +29,7 @@ const CollectionEarned: React.FC<CollectionEarnedProps> = ({
       type: 'area',
       fontFamily: "'Plus Jakarta Sans', sans-serif;",
       foreColor: '#adb0bb',
-      toolbar: {
-        show: false,
-      },
+
       height: 90,
       sparkline: {
         enabled: false,
@@ -59,9 +57,6 @@ const CollectionEarned: React.FC<CollectionEarnedProps> = ({
         show: false,
       },
 
-      type: 'datetime',
-      min: new Date(chartValues[0].created).getTime(),
-      max: new Date(chartValues[chartValues.length - 1].created).getTime(),
       labels: {
         formatter: (value) => {
           return new Date(value).toLocaleDateString('pt-br');

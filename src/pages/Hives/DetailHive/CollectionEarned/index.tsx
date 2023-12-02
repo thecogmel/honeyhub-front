@@ -38,7 +38,7 @@ const CollectionEarned: React.FC<CollectionEarnedProps> = ({
     colors: [primary],
 
     stroke: {
-      curve: 'smooth',
+      curve: 'stepline',
     },
     dataLabels: {
       enabled: true,

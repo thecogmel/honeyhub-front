@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Grid, useTheme } from '@mui/material';
+import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
 
 import Breadcrumb from '@components/Breadcrumb';
@@ -12,20 +13,18 @@ const BCrumb = [
     title: 'Home',
   },
   {
-    title: 'Doughtnut Chart',
+    title: 'Dashboard',
   },
 ];
 
 const Doughnut: React.FC = () => {
   const theme = useTheme();
-  const primary = theme.palette.primary.main;
-  const primarylight = theme.palette.primary.light;
-  const secondary = theme.palette.secondary.main;
-  const secondarylight = theme.palette.secondary.light;
   const warning = theme.palette.warning.main;
-
+  const info = theme.palette.info.main;
+  const success = theme.palette.success.main;
+  const error = theme.palette.error.main;
   // 1
-  const optionsdoughnutchart: any = {
+  const optionsdoughnutchart: ApexOptions = {
     chart: {
       id: 'donut-chart',
       fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -44,18 +43,18 @@ const Doughnut: React.FC = () => {
     legend: {
       show: true,
       position: 'bottom',
-      width: '50px',
     },
-    colors: [primary, primarylight, secondary, secondarylight, warning],
+    colors: [success, warning, error],
+    labels: ['Bom', 'Média', 'Fraco'],
     tooltip: {
       theme: 'dark',
       fillSeriesColor: false,
     },
   };
-  const seriesdoughnutchart = [45, 15, 27, 18, 35];
+  const seriesdoughnutchart = [45, 15, 27];
 
   // 2
-  const optionspiechart: any = {
+  const optionspiechart: ApexOptions = {
     chart: {
       id: 'pie-chart',
       fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -77,37 +76,37 @@ const Doughnut: React.FC = () => {
     legend: {
       show: true,
       position: 'bottom',
-      width: '50px',
     },
-    colors: [primary, primarylight, secondary, secondarylight, warning],
+    colors: [warning, info, success, error],
+    labels: ['Captura', 'Desenvolvimento', 'Produtiva', 'Caixa vazia'],
     tooltip: {
       fillSeriesColor: false,
     },
   };
-  const seriespiechart = [45, 15, 27, 18, 35];
+  const seriespiechart = [45, 15, 27, 18];
 
   return (
     <>
-      <Breadcrumb title="Doughtnut Chart" items={BCrumb} />
+      <Breadcrumb title="Dashboard" items={BCrumb} />
 
       <Grid container spacing={3}>
         <Grid item lg={6} md={12} xs={12}>
-          <ParentCard title="Doughnut Charts">
+          <ParentCard title="Status geral das colmeias">
             <Chart
-              options={optionsdoughnutchart}
-              series={seriesdoughnutchart}
-              type="donut"
+              options={optionspiechart}
+              series={seriespiechart}
+              type="pie"
               height="300px"
               width={'100%'}
             />
           </ParentCard>
         </Grid>
         <Grid item lg={6} md={12} xs={12}>
-          <ParentCard title="Pie Charts">
+          <ParentCard title="Status geral da rainha">
             <Chart
-              options={optionspiechart}
-              series={seriespiechart}
-              type="pie"
+              options={optionsdoughnutchart}
+              series={seriesdoughnutchart}
+              type="donut"
               height="300px"
               width={'100%'}
             />

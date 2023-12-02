@@ -17,6 +17,13 @@ export enum EHiveStatus {
   EMPTY_BOX = 'EMPTY_BOX',
 }
 
+export const EHiveStatusMap = {
+  [EHiveStatus.CAPTURE]: 'Captura',
+  [EHiveStatus.DEVELOPMENT]: 'Desenvolvimento',
+  [EHiveStatus.PRODUCTIVE]: 'Produtiva',
+  [EHiveStatus.EMPTY_BOX]: 'Caixa vazia',
+};
+
 export enum EHiveGenericStatus {
   REGULAR = 'REGULAR',
   GOOD = 'GOOD',

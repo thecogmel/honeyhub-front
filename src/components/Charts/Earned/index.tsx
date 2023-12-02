@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Card, CardContent, Stack, Typography, useTheme } from '@mui/material';
+import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
 
 const Earned: React.FC = () => {
@@ -8,7 +9,7 @@ const Earned: React.FC = () => {
   const primary = theme.palette.primary.main;
 
   // chart
-  const optionscolumnchart: any = {
+  const optionscolumnchart: ApexOptions = {
     chart: {
       type: 'area',
       fontFamily: "'Plus Jakarta Sans', sans-serif;",
@@ -28,7 +29,7 @@ const Earned: React.FC = () => {
       width: 2,
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
     legend: {
       show: false,
@@ -52,17 +53,17 @@ const Earned: React.FC = () => {
   const seriescolumnchart = [
     {
       name: '',
-      data: [0, 3, 1, 2, 8, 1, 5, 1],
+      data: [16, 20, 8, 0, 18, 22, 14, 25, 10, 12, 3, 6],
     },
   ];
 
   return (
     <Card>
-      <CardContent sx={{ p: '30px' }}>
-        <Typography variant="h4">2,545</Typography>
+      <CardContent>
+        <Typography variant="h4">17 Kg</Typography>
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <Typography variant="subtitle2" color="textSecondary">
-            Earned
+            Média de coleta de mel
           </Typography>
           <Typography variant="subtitle2" color="success.main">
             +1.20%
